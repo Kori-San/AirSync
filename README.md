@@ -15,3 +15,5 @@ AirSync is a script that help you create a static binary of the latest version o
     md5 md4 none
 #### Compress list:
     zlibx zlib none
+
+### If you find any bug or if you have ideas to make the script better don't mind writting in the "Issues" section :)
