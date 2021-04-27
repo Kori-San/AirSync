@@ -1,0 +1,41 @@
+#!/bin/bash
+#clear
+
+## /-|AirSync v.1.0 by Kori-San / 2021|-\ ##
+
+if mkdir ~/Desktop/AirSync ; then #Try to create 2 folders for the script
+  echo "The AirSync folders have been created"
+else
+  echo "The AirSync folders couldn't been created, maybe he was already here ?"
+fi
+sleep 1.5 ; clear
+
+cd ~/Desktop/AirSync
+
+if git clone https://github.com/WayneD/rsync ; then #Download latest rsync vers.
+  echo "rsync have been downloaded"
+else
+  echo -e "The download of rsync have encountred an issue.\nMake sur you are connected to internet."
+  EXIT 1
+fi
+sleep 1.5 ; clear
+
+if git clone https://github.com/WayneD/rsync-patches ; then #Download latest patches
+  echo "patches have been downloaded"
+else
+  echo -e "The download of patches have encountred an issue.\nMake sur you are connected to internet."
+  EXIT 1
+fi
+sleep 1.5 ; clear
+
+mkdir rsync/patches #Create the patch folders
+mv rsync-patches/* rsync/patches #Copy all the patches into the folder
+cd rsync #Go to the folder
+
+export CFLAGS=-mmacosx-version-min=10.6 #Add a min. version to make the binary work on 10.6+
+patch -p1 <patches/fileflags.diff #Patch RSync for File Flags
+./configure --with-included-popt=yes --disable-openssl --disable-lz4 --disable-zstd --disable-xxhash --disable-md2man
+make #Configure to make it Static and Make the binary
+
+mkdir ~/Desktop/AirSync_Drop #Create binary folder
+mv rsync ~/Desktop/AirSync_Drop && rm -vfr ~/Desktop/AirSync #Move the binary in a Folder and remove all downloaded files
